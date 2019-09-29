@@ -153,7 +153,7 @@ stages{
                 withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'jenkins-robot', namespace: 'development', serverUrl: 'https://kubernetes.default') {
                     // some block
                     sh 'kubectl get pods'
-                    sh 'echo lubectl - ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}'
+                    sh 'echo kubectl - ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}'
                     sh 'printenv'
 
                 }
@@ -172,15 +172,13 @@ stages{
                 sh '''
                     docker version
                     pwd
-                    ls -l
+                    
                     chmod +x $BASE_DIR/k8s/process_files.sh
 
                     cd $BASE_DIR/k8s/
-                    ./process_files.sh "$GCLOUD_PROJECT_ID" "${IMAGE_NAME}" "${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG}" "./${IMAGE_NAME}/" ${TIMESTAMP}
+                    pwd
 
-                    cd $BASE_DIR/k8s/${IMAGE_NAME}/.
-                    kubectl apply -f $BASE_DIR/k8s/${IMAGE_NAME}/
-
+                    ls -l
                '''
             }
 /*         withCredentials([file(credentialsId: "${JENKINS_GCLOUD_CRED_ID}", variable: 'JENKINSGCLOUDCREDENTIAL')])
