@@ -180,7 +180,7 @@ stages{
                 echo "Pre-Deploy"
                 sh 'hostname'
                 sh 'echo variable ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}'
-                sh  echo $0
+                sh  'echo $0'
 /*                 sh '''
                     docker version
                     pwd
