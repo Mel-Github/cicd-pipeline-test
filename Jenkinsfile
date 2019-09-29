@@ -119,7 +119,17 @@ stages{
     }
     stage('Publish'){
         steps{
-            echo "Publish"
+            container('build') {
+                echo "Publish"
+                sh 'hostname'
+                sh 'echo variable ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}'
+                sh '''
+                    docker version
+                    pwd
+                    ls -l
+               '''
+            }
+       
 /*            withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "${JENKINS_DOCKER_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWD']])
            {
            sh '''
@@ -132,7 +142,8 @@ stages{
     }
     stage('Deploy'){
         steps{
-            container('Deploy') {
+            container('build') {
+                echo "Deploy"
                 sh 'hostname'
                 sh 'echo variable ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}'
                 sh '''
