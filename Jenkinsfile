@@ -121,7 +121,7 @@ stages{
     stage('Publish'){
         steps{
             container('build') {
-                withCredentials([usernamePassword(credentialsId: 'JENKINS_DOCKER_CREDENTIALS_ID', passwordVariable: 'DOCKER_PW', usernameVariable: 'DOCKER_ID')]) {
+                withCredentials([usernamePassword(credentialsId: 'JENKINS_DOCKER_CREDENTIALS_ID', passwordVariable: 'DOCKER_PW', usernameVariable: 'DOCKER_ID')])
                 //withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "${JENKINS_DOCKER_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWD']])
                 {
                     echo "Publish"
