@@ -201,7 +201,7 @@ stages{
                 sh 'ls -l'
                 dir('$BASE_DIR/k8s/') {
                     sh 'pwd'
-                    sh './$BASE_DIR/k8s/process_files.sh 1 2 3 4 5'
+                    sh './process_files.sh 1 2 3 4 5'
                 }
                 sh 'cat $BASE_DIR/k8s/process_files.sh'
                 sh './$BASE_DIR/k8s/process_files.sh alpha beta charlie delta echo'
