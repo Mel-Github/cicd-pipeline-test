@@ -6,6 +6,31 @@
 // The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+
+
+/*         withCredentials([file(credentialsId: "${JENKINS_GCLOUD_CRED_ID}", variable: 'JENKINSGCLOUDCREDENTIAL')])
+            {
+                sh """
+                gcloud auth activate-service-account --key-file=${JENKINSGCLOUDCREDENTIAL}
+                gcloud config set compute/zone asia-southeast1-a
+                gcloud config set compute/region asia-southeast1
+                gcloud config set project ${GCLOUD_PROJECT_ID}
+                gcloud container clusters get-credentials ${GCLOUD_K8S_CLUSTER_NAME}
+                
+                chmod +x $BASE_DIR/k8s/process_files.sh
+
+                cd $BASE_DIR/k8s/
+                ./process_files.sh "$GCLOUD_PROJECT_ID" "${IMAGE_NAME}" "${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG}" "./${IMAGE_NAME}/" ${TIMESTAMP}
+
+                cd $BASE_DIR/k8s/${IMAGE_NAME}/.
+                kubectl apply -f $BASE_DIR/k8s/${IMAGE_NAME}/
+                kubectl rollout status --v=5 --watch=true -f $BASE_DIR/k8s/$IMAGE_NAME/$IMAGE_NAME-deployment.yml
+                
+                gcloud auth revoke --all
+                """
+            } */
+
+
 def getTimeStamp(){
     return sh (script: "date +'%Y%m%d%H%M%S%N' | sed 's/[0-9][0-9][0-9][0-9][0-9][0-9]\$//g'", returnStdout: true);
 }
@@ -151,7 +176,7 @@ stages{
 
     stage('Pre-Deploy'){
         steps{
-            container('jenkins-agent') {
+            container('jenkinsagent') {
                 echo "Pre-Deploy"
                 sh 'hostname'
                 sh 'echo variable ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}'
@@ -163,35 +188,11 @@ stages{
 
                     cd $BASE_DIR/k8s/
                     pwd
-
                     ls -l
                     echo $0
                 '''
-                    
                     sh label: '', script: '$BASE_DIR/k8s/process_files.sh "$GCLOUD_PROJECT_ID" "${IMAGE_NAME}" "${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG}" "./${IMAGE_NAME}/" ${TIMESTAMP}'
- 
             }
-/*         withCredentials([file(credentialsId: "${JENKINS_GCLOUD_CRED_ID}", variable: 'JENKINSGCLOUDCREDENTIAL')])
-            {
-                sh """
-                gcloud auth activate-service-account --key-file=${JENKINSGCLOUDCREDENTIAL}
-                gcloud config set compute/zone asia-southeast1-a
-                gcloud config set compute/region asia-southeast1
-                gcloud config set project ${GCLOUD_PROJECT_ID}
-                gcloud container clusters get-credentials ${GCLOUD_K8S_CLUSTER_NAME}
-                
-                chmod +x $BASE_DIR/k8s/process_files.sh
-
-                cd $BASE_DIR/k8s/
-                ./process_files.sh "$GCLOUD_PROJECT_ID" "${IMAGE_NAME}" "${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG}" "./${IMAGE_NAME}/" ${TIMESTAMP}
-
-                cd $BASE_DIR/k8s/${IMAGE_NAME}/.
-                kubectl apply -f $BASE_DIR/k8s/${IMAGE_NAME}/
-                kubectl rollout status --v=5 --watch=true -f $BASE_DIR/k8s/$IMAGE_NAME/$IMAGE_NAME-deployment.yml
-                
-                gcloud auth revoke --all
-                """
-            } */
         }
     }
 
