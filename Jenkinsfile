@@ -151,8 +151,8 @@ stages{
 
     stage('Pre-Deploy'){
         steps{
-            container('jnlp') {
-                echo "Deploy"
+            container('jenkins-agent') {
+                echo "Pre-Deploy"
                 sh 'hostname'
                 sh 'echo variable ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}'
                 sh '''
@@ -165,7 +165,9 @@ stages{
                     pwd
 
                     ls -l
+                    echo $0
                 '''
+                    
                     sh label: '', script: '$BASE_DIR/k8s/process_files.sh "$GCLOUD_PROJECT_ID" "${IMAGE_NAME}" "${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG}" "./${IMAGE_NAME}/" ${TIMESTAMP}'
  
             }
