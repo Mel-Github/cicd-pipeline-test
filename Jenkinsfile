@@ -112,8 +112,8 @@ stages{
            docker push ${DOCKER_REGISTRY_URL}/${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG}
            docker logout
            '''
-           }
-       } */
+           } */
+       } 
     }
     stage('Deploy'){
         steps{
