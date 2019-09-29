@@ -106,6 +106,7 @@ stages{
     }
     stage('Publish'){
         steps{
+            echo "Publish"
 /*            withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "${JENKINS_DOCKER_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWD']])
            {
            sh '''
@@ -118,6 +119,7 @@ stages{
     }
     stage('Deploy'){
         steps{
+            echo "Deploy"
 /*         withCredentials([file(credentialsId: "${JENKINS_GCLOUD_CRED_ID}", variable: 'JENKINSGCLOUDCREDENTIAL')])
             {
                 sh """
