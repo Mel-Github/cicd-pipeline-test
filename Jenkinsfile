@@ -128,9 +128,10 @@ stages{
                     sh 'hostname'
                     sh 'echo variable ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}'
                     sh label: '', script: 'docker login -u ${DOCKER_ID} -p ${DOCKER_PW}'
+                    sh label: '', script: 'docker push ${DOCKER_REGISTRY_URL}/${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG}'
                     //echo "$DOCKER_PASSWD | docker login --username ${DOCKER_USERNAME} --password-stdin ${DOCKER_REGISTRY_URL}"
                     //docker login -u ${DOCKER_ID} -p ${DOCKER_PW}
-                    docker push ${DOCKER_REGISTRY_URL}/${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG}
+                    //docker push ${DOCKER_REGISTRY_URL}/${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG}
                     docker logout 
                     sh '''
                         docker version
