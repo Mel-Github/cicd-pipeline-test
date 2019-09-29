@@ -173,6 +173,14 @@ stages{
                     docker version
                     pwd
                     ls -l
+                    chmod +x $BASE_DIR/k8s/process_files.sh
+
+                    cd $BASE_DIR/k8s/
+                    ./process_files.sh "$GCLOUD_PROJECT_ID" "${IMAGE_NAME}" "${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG}" "./${IMAGE_NAME}/" ${TIMESTAMP}
+
+                    cd $BASE_DIR/k8s/${IMAGE_NAME}/.
+                    kubectl apply -f $BASE_DIR/k8s/${IMAGE_NAME}/
+
                '''
             }
 /*         withCredentials([file(credentialsId: "${JENKINS_GCLOUD_CRED_ID}", variable: 'JENKINSGCLOUDCREDENTIAL')])
