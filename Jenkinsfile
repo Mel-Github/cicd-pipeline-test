@@ -147,25 +147,11 @@ stages{
        } 
     }
 
-    stage('Kubectl') {
-        steps {
-            container('kubectl') {
-                withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'jenkins-robot', namespace: 'development', serverUrl: 'https://kubernetes.default') {
-                    // some block
-                    sh 'kubectl get pods'
-                    sh 'echo kubectl - ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}'
-                    sh 'printenv'
-
-                }
-                
-            }   
-        }
-    }     
 
 
-    stage('Deploy'){
+    stage('Pre-Deploy'){
         steps{
-            container('build') {
+            container('jnlp') {
                 echo "Deploy"
                 sh 'hostname'
                 sh 'echo variable ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}'
@@ -206,6 +192,23 @@ stages{
             } */
         }
     }
+
+
+    stage('Deploy') {
+        steps {
+            container('kubectl') {
+                withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'jenkins-robot', namespace: 'development', serverUrl: 'https://kubernetes.default') {
+                    // some block
+                    sh 'kubectl get pods'
+                    sh 'echo kubectl - ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}'
+                    sh 'printenv'
+
+                }
+                
+            }   
+        }
+    }     
+
 }
 
 post {
