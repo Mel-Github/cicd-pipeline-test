@@ -121,13 +121,15 @@ stages{
     stage('Publish'){
         steps{
             container('build') {
+                sh 'echo variable 1 ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}'
                 withCredentials([usernamePassword(credentialsId: 'JENKINS_DOCKER_CREDENTIALS_ID', passwordVariable: 'DOCKER_PW', usernameVariable: 'DOCKER_ID')])
                 //withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "${JENKINS_DOCKER_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWD']])
                 {
                     echo "Publish"
                     sh 'hostname'
-                    sh 'echo variable ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}'
+                    sh 'echo variable 2 ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}'
                     sh label: '', script: 'docker login -u ${DOCKER_ID} -p ${DOCKER_PW}'
+                    sh 'printenv'
                     sh label: '', script: 'docker push ${DOCKER_REGISTRY_URL}/${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG}'
                     //echo "$DOCKER_PASSWD | docker login --username ${DOCKER_USERNAME} --password-stdin ${DOCKER_REGISTRY_URL}"
                     //docker login -u ${DOCKER_ID} -p ${DOCKER_PW}
