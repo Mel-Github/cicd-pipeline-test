@@ -87,6 +87,8 @@ stages{
             sh 'docker version'
             sh '''
             docker ps -a
+            pwd
+            ls -l
             '''
 /*             sh '''
             docker rmi $(docker images -f 'dangling=true' -q) || true
@@ -99,7 +101,12 @@ stages{
     stage('Build'){
         steps{
 
-              sh 'echo variable ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}'
+            sh 'echo variable ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}'
+            sh '''
+                docker version
+                pwd
+                ls -l
+            '''
 /*            withEnv(["APP_NAME=${APP_NAME}", "PROJECT_NAME=${PROJECT_NAME}"]){
                sh '''
                docker build -t ${DOCKER_REGISTRY_URL}/${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG} --build-arg APP_NAME=${IMAGE_NAME}  -f app/Dockerfile app/.
@@ -123,6 +130,11 @@ stages{
     stage('Deploy'){
         steps{
             echo "Deploy"
+            sh '''
+                docker version
+                pwd
+                ls -l
+            '''
 /*         withCredentials([file(credentialsId: "${JENKINS_GCLOUD_CRED_ID}", variable: 'JENKINSGCLOUDCREDENTIAL')])
             {
                 sh """
