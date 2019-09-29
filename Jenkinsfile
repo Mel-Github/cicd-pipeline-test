@@ -91,10 +91,6 @@ stages{
             pwd
             ls -l
             '''
-/*             sh '''
-            docker rmi $(docker images -f 'dangling=true' -q) || true
-            docker rmi $(docker images | sed 1,2d | awk '{print $3}') || true
-            ''' */
             }
         }
 
@@ -123,39 +119,50 @@ stages{
             container('build') {
                 sh 'echo variable 1 ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}'
                 withCredentials([usernamePassword(credentialsId: 'JENKINS_DOCKER_CREDENTIALS_ID', passwordVariable: 'DOCKER_PW', usernameVariable: 'DOCKER_ID')])
-                //withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "${JENKINS_DOCKER_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWD']])
+
+                // We need to keep login section out from the push logic script else the environment DOCKER_PROJECT_NAMESPACE will be overwritten by the withCredentials values.
                 {
                     sh label: '', script: 'docker login -u ${DOCKER_ID} -p ${DOCKER_PW}'
                 }
+
+                // Core login scripts dealing with Docker registry goes here.
+
                     echo "Publish"
                     sh 'hostname'
                     sh 'echo variable 2 ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}'
                     
                     sh 'printenv'
-                    //echo "docker push ${DOCKER_REGISTRY_URL}/${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG}"
+
+
+                    // Pushing to Docker 
+
                     sh label: '', script: 'docker push ${DOCKER_REGISTRY_URL}/${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG}'
-                    //echo "$DOCKER_PASSWD | docker login --username ${DOCKER_USERNAME} --password-stdin ${DOCKER_REGISTRY_URL}"
-                    //docker login -u ${DOCKER_ID} -p ${DOCKER_PW}
-                    //docker push ${DOCKER_REGISTRY_URL}/${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG}
                     sh 'docker logout' 
                     sh '''
                         docker version
                         pwd
                         ls -l
                     '''
-                // }
             }
-       
-/*            withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "${JENKINS_DOCKER_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWD']])
-           {
-           sh '''
-           echo $DOCKER_PASSWD | docker login --username ${DOCKER_USERNAME} --password-stdin ${DOCKER_REGISTRY_URL} 
-           docker push ${DOCKER_REGISTRY_URL}/${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG}
-           docker logout
-           '''
-           } */
        } 
     }
+
+    stage('Kubectl') {
+        steps {
+            container('kubectl') {
+                withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'jenkins-robot', namespace: 'development', serverUrl: 'https://kubernetes.default') {
+                    // some block
+                    sh 'kubectl get pods'
+                    sh 'echo lubectl - ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}'
+                    sh 'printenv'
+
+                }
+                
+            }   
+        }
+    }     
+
+
     stage('Deploy'){
         steps{
             container('build') {
