@@ -130,7 +130,8 @@ stages{
                     sh 'echo variable 2 ${env.DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}'
                     sh label: '', script: 'docker login -u ${DOCKER_ID} -p ${DOCKER_PW}'
                     sh 'printenv'
-                    sh label: '', script: 'docker push ${DOCKER_REGISTRY_URL}/${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG}'
+                    echo "docker push ${DOCKER_REGISTRY_URL}/${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG}"
+                    //sh label: '', script: 'docker push ${DOCKER_REGISTRY_URL}/${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG}'
                     //echo "$DOCKER_PASSWD | docker login --username ${DOCKER_USERNAME} --password-stdin ${DOCKER_REGISTRY_URL}"
                     //docker login -u ${DOCKER_ID} -p ${DOCKER_PW}
                     //docker push ${DOCKER_REGISTRY_URL}/${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG}
