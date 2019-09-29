@@ -125,12 +125,12 @@ stages{
                 withCredentials([usernamePassword(credentialsId: 'JENKINS_DOCKER_CREDENTIALS_ID', passwordVariable: 'DOCKER_PW', usernameVariable: 'DOCKER_ID')])
                 //withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "${JENKINS_DOCKER_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWD']])
                 {
-
+                    sh label: '', script: 'docker login -u ${DOCKER_ID} -p ${DOCKER_PW}'
                 }
                     echo "Publish"
                     sh 'hostname'
                     sh 'echo variable 2 ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}'
-                    sh label: '', script: 'docker login -u ${DOCKER_ID} -p ${DOCKER_PW}'
+                    
                     sh 'printenv'
                     echo "docker push ${DOCKER_REGISTRY_URL}/${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG}"
                     //sh label: '', script: 'docker push ${DOCKER_REGISTRY_URL}/${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG}'
