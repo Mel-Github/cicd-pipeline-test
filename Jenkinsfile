@@ -127,8 +127,9 @@ stages{
                     echo "Publish"
                     sh 'hostname'
                     sh 'echo variable ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}'
+                    sh label: '', script: 'docker login -u ${DOCKER_ID} -p ${DOCKER_PW}'
                     //echo "$DOCKER_PASSWD | docker login --username ${DOCKER_USERNAME} --password-stdin ${DOCKER_REGISTRY_URL}"
-                    sh 'docker login -u ${DOCKER_ID} -p ${DOCKER_PW}''
+                    //docker login -u ${DOCKER_ID} -p ${DOCKER_PW}
                     docker push ${DOCKER_REGISTRY_URL}/${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG}
                     docker logout 
                     sh '''
