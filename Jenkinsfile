@@ -180,7 +180,8 @@ stages{
                 echo "Pre-Deploy"
                 sh 'hostname'
                 sh 'echo variable ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}'
-                sh '''
+                sh  echo $0
+/*                 sh '''
                     docker version
                     pwd
                     
@@ -189,9 +190,13 @@ stages{
                     cd $BASE_DIR/k8s/
                     pwd
                     ls -l
-                    echo $0
-                '''
-                    sh label: '', script: '$BASE_DIR/k8s/process_files.sh "$GCLOUD_PROJECT_ID" "${IMAGE_NAME}" "${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG}" "./${IMAGE_NAME}/" ${TIMESTAMP}'
+                    
+                ''' */
+                sh 'chmod +x $BASE_DIR/k8s/process_files.sh'
+                sh 'cd $BASE_DIR/k8s/''
+                sh 'pwd'
+                sh 'ls -l'
+                sh './process_files.sh "$GCLOUD_PROJECT_ID" "${IMAGE_NAME}" "${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG}" "./${IMAGE_NAME}/" ${TIMESTAMP}'
           //  }
         }
     }
