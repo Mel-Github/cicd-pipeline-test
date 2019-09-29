@@ -196,7 +196,7 @@ stages{
                 sh 'cd $BASE_DIR/k8s/'
                 sh 'pwd'
                 sh 'ls -l'
-                sh './process_files.sh "$GCLOUD_PROJECT_ID" "${IMAGE_NAME}" "${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG}" "./${IMAGE_NAME}/" ${TIMESTAMP}'
+                sh "./process_files.sh \"$GCLOUD_PROJECT_ID\" \"${IMAGE_NAME}\" \"${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG}\" \"./${IMAGE_NAME}/\" ${TIMESTAMP}"
           //  }
         }
     }
