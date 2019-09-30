@@ -219,13 +219,13 @@ stages{
                     // some block
                     sh 'kubectl get pods'
                     sh 'echo kubectl - ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}'
-                    sh 'printenv'
-                      dir("$BASE_DIR/k8s/${IMAGE_NAME}") {
-                        // cd $BASE_DIR/k8s/${IMAGE_NAME}/.
-                        sh 'ls -l'
-                        kubectl apply -f $BASE_DIR/k8s/${IMAGE_NAME}/
-                        //kubectl rollout status --v=5 --watch=true -f $BASE_DIR/k8s/$IMAGE_NAME/$IMAGE_NAME-deployment.yml
-                      }
+                    //sh 'printenv'
+                    dir("$BASE_DIR/k8s/${IMAGE_NAME}") {
+                    // cd $BASE_DIR/k8s/${IMAGE_NAME}/.
+                    sh 'ls -l'
+                    sh 'kubectl apply -f $BASE_DIR/k8s/${IMAGE_NAME}/'
+                    //kubectl rollout status --v=5 --watch=true -f $BASE_DIR/k8s/$IMAGE_NAME/$IMAGE_NAME-deployment.yml
+                    }
                 }
                 
             }   
