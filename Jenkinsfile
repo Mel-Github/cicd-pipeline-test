@@ -28,6 +28,12 @@
                 
                 gcloud auth revoke --all
                 """
+
+                createDynatraceDeploymentEvent(envId: 'Dynatrace Tenant', tagMatchRules: [[tags: [[context: 'CONTEXTLESS', key: 'app', value: '${env.APP_NAME}'], [context: 'CONTEXTLESS', key: 'environment', value: 'development']]]]) {
+    // some block
+}
+
+
             } */
 
 
@@ -237,7 +243,7 @@ stages{
 
 post {
     always {
-        echo "Build# ${env.BUILD_NUMBER} - Job: ${env.JOB_NUMBER} status is: ${currentBuild.currentResult}"
+        echo "Build# ${env.BUILD_NUMBER} - Job: ${BUILD_NUMBER} status is: ${currentBuild.currentResult}"
         // emailext(attachLog: true,
         // mimeType: 'text/html',
         // body: '''
