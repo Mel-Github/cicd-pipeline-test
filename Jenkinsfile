@@ -33,7 +33,6 @@
     // some block
 }
 
-
             } */
 
 
@@ -230,6 +229,7 @@ stages{
                     dir("$BASE_DIR/k8s/${IMAGE_NAME}") {
                     // cd $BASE_DIR/k8s/${IMAGE_NAME}/.
                     sh 'ls -l'
+                    sh 'cat kubejencdp-app-deployment.yml'
                     sh 'kubectl apply -f $BASE_DIR/k8s/${IMAGE_NAME}/'
                     //kubectl rollout status --v=5 --watch=true -f $BASE_DIR/k8s/$IMAGE_NAME/$IMAGE_NAME-deployment.yml
                     }
