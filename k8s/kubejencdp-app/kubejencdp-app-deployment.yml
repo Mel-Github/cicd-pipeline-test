@@ -3,6 +3,9 @@ kind: Deployment
 metadata:
   name: __APP_NAME__-dc
 spec:
+  selector:
+    matchLabels:
+      app: __APP_NAME__
   replicas: 1
   template:
     metadata:
