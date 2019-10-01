@@ -220,22 +220,34 @@ stages{
 
     stage('Deploy') {
         steps {
-            container('kubectl') {
-                withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'jenkins-robot', namespace: 'development', serverUrl: 'https://kubernetes.default') {
-                    // some block
-                    sh 'kubectl get pods'
-                    sh 'echo kubectl - ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}'
-                    //sh 'printenv'
-                    dir("$BASE_DIR/k8s/${IMAGE_NAME}") {
-                    // cd $BASE_DIR/k8s/${IMAGE_NAME}/.
-                    sh 'ls -l'
-                    sh 'cat kubejencdp-app-deployment.yml'
-                    sh 'kubectl apply -f $BASE_DIR/k8s/${IMAGE_NAME}/'
-                    //kubectl rollout status --v=5 --watch=true -f $BASE_DIR/k8s/$IMAGE_NAME/$IMAGE_NAME-deployment.yml
-                    }
-                }
-                
-            }   
+            createDynatraceDeploymentEvent(
+                envId: 'Dynatrace Tenant', 
+                tagMatchRules: [
+                    [
+                        meTypes:[[meType: 'SERVICE']],
+                        tags: [
+                            [context: 'CONTEXTLESS', key: 'app', value: "${APP_NAME}"], 
+                            [context: 'CONTEXTLESS', key: 'environment', value: 'development']
+                        ]
+                    ]
+                ]) {
+                    container('kubectl') {
+                        withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'jenkins-robot', namespace: 'development', serverUrl: 'https://kubernetes.default') {
+                            // some block
+                            sh 'kubectl get pods'
+                            sh 'echo kubectl - ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}'
+                            //sh 'printenv'
+                            dir("$BASE_DIR/k8s/${IMAGE_NAME}") {
+                            // cd $BASE_DIR/k8s/${IMAGE_NAME}/.
+                            sh 'ls -l'
+                            sh 'cat kubejencdp-app-deployment.yml'
+                            sh 'kubectl apply -f $BASE_DIR/k8s/${IMAGE_NAME}/'
+                            //kubectl rollout status --v=5 --watch=true -f $BASE_DIR/k8s/$IMAGE_NAME/$IMAGE_NAME-deployment.yml
+                            }
+                        }
+                        
+                    }   
+            }
         }
     }     
 
