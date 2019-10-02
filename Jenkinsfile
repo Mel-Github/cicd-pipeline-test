@@ -145,6 +145,17 @@ stages{
            }    */
         }
     }
+
+    stage('Image-Scan'){
+        steps {
+            container('build') {
+                echo "Scanning - ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG}"
+                aquaMicroscanner imageName: "${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG}", notCompliesCmd: '', onDisallowed: 'ignore', outputFormat: 'html'
+            }
+        }
+    }
+
+
     stage('Publish'){
         steps{
             container('build') {
@@ -179,14 +190,6 @@ stages{
        } 
     }
 
-    stage('Image-Scan'){
-        steps {
-            container('build') {
-                echo "Scanning - ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG}"
-                aquaMicroscanner imageName: "${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG}", notCompliesCmd: '', onDisallowed: 'ignore', outputFormat: 'html'
-            }
-        }
-    }
 
 
     stage('Pre-Deploy'){
