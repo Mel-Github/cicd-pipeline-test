@@ -179,7 +179,12 @@ stages{
     }
 
     stage('Image-Scan'){
-        aquaMicroscanner imageName: '${DOCKER_REGISTRY_URL}/${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG}', notCompliesCmd: '', onDisallowed: 'ignore', outputFormat: 'html'
+        steps {
+            aquaMicroscanner imageName: '${DOCKER_REGISTRY_URL}/${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG}', 
+            notCompliesCmd: '', 
+            onDisallowed: 'ignore', 
+            outputFormat: 'html'
+        }
     }
 
 
