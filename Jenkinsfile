@@ -171,6 +171,7 @@ stages{
                     sh 'docker logout' 
                     sh '''
                         docker version
+                        docker image ls
                         pwd
                         ls -l
                     '''
@@ -181,7 +182,7 @@ stages{
     stage('Image-Scan'){
         steps {
             echo "Scanning - ${DOCKER_REGISTRY_URL}/${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG}"
-            aquaMicroscanner imageName: "${DOCKER_REGISTRY_URL}/${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG}", 
+            aquaMicroscanner imageName: "${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG}", 
             notCompliesCmd: '', 
             onDisallowed: 'ignore', 
             outputFormat: 'html'
