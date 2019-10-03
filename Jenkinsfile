@@ -31,6 +31,7 @@
 
                 createDynatraceDeploymentEvent(envId: 'Dynatrace Tenant', tagMatchRules: [[tags: [[context: 'CONTEXTLESS', key: 'app', value: '${env.APP_NAME}'], [context: 'CONTEXTLESS', key: 'environment', value: 'development']]]]) {
     // some block
+    // test
 }
 
             } */
@@ -144,6 +145,17 @@ stages{
            }    */
         }
     }
+
+    stage('Image-Scan'){
+        steps {
+            container('build') {
+                echo "Scanning - ${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG}"
+                aquaMicroscanner imageName: "${DOCKER_PROJECT_NAMESPACE}/${IMAGE_NAME}:${RELEASE_TAG}", notCompliesCmd: '', onDisallowed: 'ignore', outputFormat: 'html'
+            }
+        }
+    }
+
+
     stage('Publish'){
         steps{
             container('build') {
@@ -170,6 +182,7 @@ stages{
                     sh 'docker logout' 
                     sh '''
                         docker version
+                        docker image ls
                         pwd
                         ls -l
                     '''
