@@ -86,6 +86,15 @@
             <stringProp name="filename"></stringProp>
           </ResultCollector>
           <hashTree/>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">x-dynatrace</stringProp>
+                <stringProp name="Header.value">${__P(dt_ltn)}</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
         </hashTree>
       </hashTree>
     </hashTree>
