@@ -2,7 +2,7 @@
 	"spec_version": "2.0",
 	"timeseries": [{
 			"timeseriesId": "com.dynatrace.builtin:service.responsetime",
-			"aggregation": "avg",
+			"aggregation": "percentile",
 			"tags": "app:kubejencdp-app-ctr,environment:development",
 			"upperWarning": 5000,
 			"upperSevere": 10000
@@ -10,7 +10,7 @@
 		{
 			"timeseriesId": "com.dynatrace.builtin:service.server_side_requests",
 			"aggregation": "count",
-			"entityIds": "app:kubejencdp-app-ctr,environment:development",
+			"tags": "app:kubejencdp-app-ctr,environment:development",
 			"upperWarning": 50,
 			"upperSevere": 100
 		}
