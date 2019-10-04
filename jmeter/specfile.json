@@ -3,22 +3,16 @@
 	"timeseries": [{
 			"timeseriesId": "com.dynatrace.builtin:service.responsetime",
 			"aggregation": "avg",
-			"tags": "Frontend",
+			"tags": "app:kubejencdp-app-ctr,environment:development",
 			"upperWarning": 5000,
 			"upperSevere": 10000
 		},
 		{
-			"timeseriesId": "com.dynatrace.builtin:service.responsetime",
-			"aggregation": "avg",
-			"entityIds": "SERVICE-65778F58A66834D8",
-			"upperWarning": 5000,
-			"upperSevere": 8000
-		},
-		{
-			"timeseriesId": "com.dynatrace.builtin:docker.container.cpu",
-			"aggregation": "avg",
+			"timeseriesId": "com.dynatrace.builtin:service.server_side_requests",
+			"aggregation": "count",
+			"entityIds": "app:kubejencdp-app-ctr,environment:development",
 			"upperWarning": 50,
-			"upperSevere": 70
+			"upperSevere": 100
 		}
 	]
 }
