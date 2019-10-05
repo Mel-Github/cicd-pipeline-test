@@ -290,7 +290,15 @@ stages{
                             sh 'ls -l /home/jenkins/agent/workspace'
                             sh 'jmeter -version'
                             //sh 'ls -l /home/jenkins/agent/workspace'
-                            sh 'jmeter  -Jdt_ltn=${dt_ltn} -Jhostname=${hostname} -Jthread=${thread} -Jjmeter.save.saveservice.output_format=xml -n -t "${APP_NAME}".jmx l "${APP_NAME}".jtl'
+                            //sh 'jmeter  -Jdt_ltn=${dt_ltn} -Jhostname=${hostname} -Jthread=${thread} -Jjmeter.save.saveservice.output_format=xml -n -t "${APP_NAME}".jmx l "${APP_NAME}".jtl'
+                            build job: 'Jmeter', 
+                                parameters: [
+                                    string(name: 'thread', value: '15'), 
+                                    string(name: 'hostname', value: '35.187.247.198'), 
+                                    string(name: 'loop', value: '2'), 
+                                    string(name: 'rampup', value: '5'), 
+                                    string(name: 'dt_ltn', value: 'LTN=Homepage;VU=5')
+                                ]
                         }
                     }
                 }
