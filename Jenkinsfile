@@ -312,16 +312,16 @@ stages{
         }
     }
 
-    stage('Report performance test result') {
-        steps {
-            container('jmeter') {
-                sh 'apk update && apk add docker'
-                dir("$WORKSPACE/jmeter/") {
-                    perfReport filterRegex: '', sourceDataFiles: 'kubejencdp-app-ctr.jtl'
-                }
-            }
-        }
-    }    
+    // stage('Report performance test result') {
+    //     steps {
+    //         container('jmeter') {
+    //             sh 'apk update && apk add docker'
+    //             dir("$WORKSPACE/jmeter/") {
+    //                 perfReport filterRegex: '', sourceDataFiles: 'kubejencdp-app-ctr.jtl'
+    //             }
+    //         }
+    //     }
+    // }    
 
 }
 
