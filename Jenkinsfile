@@ -262,7 +262,66 @@ stages{
                     }   
             }
         }
-    }     
+    } 
+
+
+    stage('performance test') {
+        steps {
+            recordDynatraceSession(
+                envId: 'Dynatrace Tenant',
+                testCase: 'loadtest',
+                tagMatchRules: [
+                    [
+                        meTypes: [[meType: 'SERVICE']],
+                        tags:[
+                            [context: 'CONTEXTLESS', key: 'app', value: "${APP_NAME}"],
+                            [context: 'CONTEXTLESS', key: 'environment', value: 'development']    
+                        ]
+                    ] 
+                ]
+            )   {
+                    container('jmeter') {
+                        sh 'apk update && apk add docker'
+                        dir("$WORKSPACE/jmeter/") {
+                            sh 'printenv'
+                            sh 'cd ..'
+                            sh 'pwd'
+                            sh 'ls -l'
+                            sh 'ls -l /home/jenkins/agent/workspace'
+                            sh 'jmeter -version'
+                            //sh 'ls -l /home/jenkins/agent/workspace'
+                            //sh 'jmeter  -Jdt_ltn=${dt_ltn} -Jhostname=${hostname} -Jthread=${thread} -Jjmeter.save.saveservice.output_format=xml -n -t "${APP_NAME}".jmx l "${APP_NAME}".jtl'
+                            build job: 'Jmeter', 
+                                parameters: [
+                                    string(name: 'thread', value: '15'), 
+                                    string(name: 'hostname', value: '35.187.247.198'), 
+                                    string(name: 'loop', value: '2'), 
+                                    string(name: 'rampup', value: '5'), 
+                                    string(name: 'dt_ltn', value: 'LTN=Homepage;VU=5')
+                                ]
+                        }
+                    }
+                }
+
+                dir("$WORKSPACE/jmeter/") {
+                    sh 'pwd'    
+                    sh 'ls -l'
+                    sh 'cat specfile.json'
+                    perfSigDynatraceReports envId: 'Dynatrace Tenant', nonFunctionalFailure: 1, specFile: 'specfile.json'
+                }
+        }
+    }
+
+    // stage('Report performance test result') {
+    //     steps {
+    //         container('jmeter') {
+    //             sh 'apk update && apk add docker'
+    //             dir("$WORKSPACE/jmeter/") {
+    //                 perfReport filterRegex: '', sourceDataFiles: 'kubejencdp-app-ctr.jtl'
+    //             }
+    //         }
+    //     }
+    // }    
 
 }
 

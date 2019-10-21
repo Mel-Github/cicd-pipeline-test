@@ -1,0 +1,36 @@
+/* {
+	"timeseries": [{
+			"timeseriesId": "com.dynatrace.builtin:service.responsetime",
+			"aggregation": "percentile",
+			"tags": "app:kubejencdp-app-ctr,environment:development",
+			"upperWarning": 5000,
+			"upperSevere": 10000
+		},
+		{
+            "timeseriesId": "com.dynatrace.builtin:service.server_side_requests",
+            "relativeTime": "hour",
+			"aggregationType": "count",
+			"tags": "app:kubejencdp-app-ctr&environment:development",
+			"lowerLimit": 10,
+			"upperLimit": 20
+		}
+	]
+} */
+{
+	"timeseries": [
+        {
+            "timeseriesId": "com.dynatrace.builtin:service.responsetime",
+            "relativeTime": "hour",
+            "aggregationType": "avg",
+            "tag": "app:kubejencdp-app-ctr&environment:development"
+        },
+        {
+            "timeseriesId": "com.dynatrace.builtin:service.server_side_requests",
+            "relativeTime": "hour",
+            "aggregationType": "count",
+            "tag": "app:kubejencdp-app-ctr&environment:development",
+            "lowerLimit": 10,
+            "upperLimit": 20
+        }
+    ]
+}
