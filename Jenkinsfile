@@ -287,7 +287,7 @@ stages{
                             sh 'cd ..'
                             sh 'pwd'
                             sh 'ls -l'
-                            sh 'ls -l /home/jenkins/agent/workspace'
+                            //sh 'ls -l /home/jenkins/agent/workspace'
                             sh 'jmeter -version'
                             //sh 'ls -l /home/jenkins/agent/workspace'
                             //sh 'jmeter  -Jdt_ltn=${dt_ltn} -Jhostname=${hostname} -Jthread=${thread} -Jjmeter.save.saveservice.output_format=xml -n -t "${APP_NAME}".jmx l "${APP_NAME}".jtl'
